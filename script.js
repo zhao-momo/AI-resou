@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 async function getAIAnalysis(title) {
+  const model = document.getElementById('model-select').value;
   const response = await fetch(`https://api.siliconflow.cn/v1/chat/completions`, {
     method: 'POST',
     headers: {
@@ -77,10 +78,10 @@ async function getAIAnalysis(title) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      model: "Qwen/Qwen2-1.5B-Instruct",
+      model: model,
       messages: [{
         role: "user",
-        content: `请用中文简要分析这个热搜话题的潜在传播因素：${title}`
+        content: `请用中文简要分析这个热搜话题：${title}`
       }]
     })
   });
