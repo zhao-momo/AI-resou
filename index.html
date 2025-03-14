@@ -64,13 +64,57 @@
             66% { content: '..'; }
             100% { content: '...'; }
         }
+        .container {
+        display: flex;
+        gap: 2rem;
+        }
+
+        .left-panel {
+        flex: 1;
+        max-width: 400px;
+        }
+
+        .right-panel {
+        flex: 1;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+        }
+
+        .styled-select {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #007aff;
+        border-radius: 8px;
+        background: white;
+        font-size: 16px;
+        margin-bottom: 1rem;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007aff'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 24px;
+        }
     </style>
 </head>
 <body>
-    <h1>📈 实时热搜榜</h1>
-    <ul class="hotsearch-list">
-    </ul>
-    <div class="output-area" id="ai-output"></div>
+    <div class="container">
+      <div class="left-panel">
+        <h1>📈 实时热搜榜</h1>
+        <ul class="hotsearch-list"></ul>
+      </div>
+      <div class="right-panel">
+        <select id="model-select" class="styled-select">
+          <option value="Qwen/Qwen2-1.5B-Instruct">Qwen2-1.5B</option>
+          <option value="Qwen/Qwen2-7B-Instruct">Qwen2-7B</option>
+          <option value="Qwen/Qwen2.5-Coder-7B-Instruct">Qwen2.5-Coder-7B</option>
+          <option value="THUDM/chatglm3-6b">ChatGLM3-6B</option>
+          <option value="THUDM/glm-4-9b-chat">ChatGLM4-9B-Chat</option>
+          <option value="AIDC-AI/Marco-o1">Marco-o1</option>
+        </select>
+        <div class="output-area" id="ai-output"></div>
+      </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
