@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI实时热搜榜</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui;
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .hotsearch-list {
+            list-style: none;
+            padding: 0;
+            counter-reset: hotsearch-counter;
+        }
+
+        .hotsearch-item {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            counter-increment: hotsearch-counter;
+        }
+
+        .hotsearch-item::before {
+            content: counter(hotsearch-counter);
+            color: #fff;
+            background: #ff3b30;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+
+        .hotsearch-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .output-area {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #f1f3f5;
+            border-radius: 8px;
+            min-height: 100px;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: loading 1s infinite;
+        }
+
+        @keyframes loading {
+            33% { content: '.'; }
+            66% { content: '..'; }
+            100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <h1>📈 实时热搜榜</h1>
+    <ul class="hotsearch-list">
+    </ul>
+    <div class="output-area" id="ai-output"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
