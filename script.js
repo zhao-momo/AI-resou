@@ -60,11 +60,21 @@ document.addEventListener('DOMContentLoaded', () => {
     
     try {
       const analysis = await getAIAnalysis(e.target.textContent);
-      output.innerHTML = `<strong>${e.target.textContent}</strong><br>${analysis}`;
+      const markdownContent = marked.parse(`# ${e.target.textContent}\n${analysis.raw}`);
+let charIndex = 0;
+const outputTimer = setInterval(() => {
+  if (charIndex < markdownContent.length) {
+    output.innerHTML = `<div class="markdown-body">${markdownContent.substring(0, charIndex)}</div>`;
+    charIndex++;
+  } else {
+    clearInterval(outputTimer);
+  }
+}, 30);
     } catch (error) {
       output.textContent = `分析失败: ${error.message}`;
     }
     output.classList.remove('loading');
+clearInterval(outputTimer);
   });
 });
 
@@ -81,13 +91,16 @@ async function getAIAnalysis(title) {
       model: model,
       messages: [{
         role: "user",
-        content: `请用中文简要分析这个热搜话题：${title}`
+        content: `给定你一个热搜的热点：${title}，请你分析一下这个标题的热度，以及它的原因。`
       }]
     })
   });
 
   const data = await response.json();
-  return data.choices[0].message.content;
+  return {
+    raw: data.choices[0].message.content,
+    chars: Array.from(data.choices[0].message.content)
+  };
 }
 
 // 修改点击事件处理函数
@@ -97,12 +110,36 @@ document.querySelectorAll('.hotsearch-item').forEach(item => {
     const output = document.getElementById('ai-output');
     
     output.classList.add('loading');
+    output.innerHTML = '<div class="markdown-body"></div>';
+    
     try {
       const analysis = await getAIAnalysis(title);
-      output.innerHTML = `<strong>AI分析：</strong>${analysis}`;
+      const container = output.querySelector('.markdown-body');
+      let isRendering = false;
+      
+      container.innerHTML = '<span class="cursor"></span>';
+      
+      if (!isRendering) {
+        isRendering = true;
+        let index = 0;
+        
+        function typeWriter() {
+          if (index < analysis.raw.length) {
+            const currentHtml = marked.parse(analysis.raw.substring(0, index + 1));
+            container.innerHTML = currentHtml + '<span class="cursor"></span>';
+            index++;
+            requestAnimationFrame(typeWriter);
+          } else {
+            isRendering = false;
+          }
+        }
+        
+        typeWriter();
+      }
     } catch (error) {
       output.textContent = '分析失败，请稍后重试';
     }
     output.classList.remove('loading');
+clearInterval(outputTimer);
   });
 });
